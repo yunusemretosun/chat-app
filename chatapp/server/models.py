@@ -17,11 +17,11 @@ class Server(models.Model):
     # categories have multple server and servers have one category
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="server_category")
     description = models.CharField(max_length=500, blank=True, null=True)
-    # members have multiple server and servers have multiple memver
+    # members have multiple server and servers have multiple member
     member = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} - {self.id}"
 
 
 class Channel(models.Model):

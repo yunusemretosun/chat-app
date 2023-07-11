@@ -18,5 +18,20 @@
             "source.organizeImports": true
         },
         "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "jenkins-runner.jobs": {
+        "gitops-argocd_CI": {
+            "isDefault": true,
+            "runWith": "jenkins-master",
+            "name": "gitops-argocd_CI",
+        }
+    },
+    "jenkins-runner.hostConfigs": {
+        "jenkins-master": {
+            "url": "http://10.106.31.102:8080",
+            "user": "tosun",
+            "password": "123456tr",
+            "useCrumbIssuer": true,
+        },
     }
 }
