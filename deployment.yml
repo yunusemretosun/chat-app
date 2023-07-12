@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: chat-app-container
-        image: yunusemretosun/chatapp:v1
+        image: yunusemretosun/chatapp:22
         resources:
           limits:
             memory: "500Mi"
