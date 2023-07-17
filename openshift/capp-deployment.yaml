@@ -17,6 +17,9 @@ spec:
       containers:
       - name: chat-app-container
         image: yunusemretosun/chatapp:13
+        envFrom:
+            - configMapRef:
+                name: django-config
         resources:
           limits:
             memory: "500Mi"
