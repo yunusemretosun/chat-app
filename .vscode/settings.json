@@ -29,8 +29,8 @@
     "jenkins-runner.hostConfigs": {
         "jenkins-master": {
             "url": "http://10.106.31.102:8080",
-            "user": "tosun",
-            "password": "123456tr",
+            "user": "appdev",
+            "password": "sptlab123",
             "useCrumbIssuer": true,
         },
     }

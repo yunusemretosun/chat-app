@@ -1,0 +1,4 @@
+namespace: capp
+resources:
+- capp-svc.yaml
+- capp-deployment.yaml
