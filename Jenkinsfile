@@ -62,9 +62,9 @@ pipeline{
                 script{
                     
                     sh """
-                        cat capp-deployment.yaml
-                        sed -i 's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' capp-deployment.yaml
-                        cat capp-deployment.yaml
+                        cat /openshift/capp-deployment.yaml
+                        sed -i 's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' /openshift/capp-deployment.yaml
+                        cat /openshift/capp-deployment.yaml
                     """
                     }
                 }
@@ -77,7 +77,7 @@ pipeline{
                     sh """
                         git config --global user.email "yunusemre.tosun@sekom.com.tr"
                         git config --global user.name "yunusemretosun"
-                        git add capp-deployment.yaml
+                        git add /openshift/capp-deployment.yaml
                         git commit -m "changed deployment file"
                     """ 
                     withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
