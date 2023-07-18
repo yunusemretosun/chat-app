@@ -1,0 +1,60 @@
+pipeline{
+    agent any
+
+    environment{
+        APP_NAME = "chatapp"
+    }
+
+    stages{
+        stage("Clean workspace"){
+            steps{
+                script{
+                    cleanWs()
+                }
+            }
+        }
+
+        stage("Checkout SCM"){
+            steps{
+                script{
+                    git credentialsId: 'github',
+                    url: 'https://github.com/yunusemretosun/gitops_argoCD.git',
+                    branch: "master"
+                }
+            }
+        }
+
+       
+
+        stage("Updateing Openshift Deployment Files"){
+            steps{
+                script{
+                    
+                    sh """
+                        cat capp-deployment.yaml
+                        sed -i 's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' capp-deployment.yaml
+                        cat capp-deployment.yaml
+                    """
+                    }
+                }
+            }
+
+        stage("Push the changed files to github"){
+            steps{
+                script{
+                    
+                    sh """
+                        git config --global user.email "yunusemre.tosun@sekom.com.tr"
+                        git config --global user.name "yunusemretosun"
+                        git add capp-deployment.yaml
+                        git commit -m "changed deployment file"
+                    """ 
+                    withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
+                            sh "git push  https://github.com/yunusemretosun/gitops_argoCD.git master" 
+                        }
+                    }
+                }
+            }
+            
+    }
+}

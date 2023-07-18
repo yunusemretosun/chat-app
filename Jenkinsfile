@@ -67,9 +67,9 @@ pipeline{
                         cat ./openshift/capp-deployment.yaml
                     """
                     }
-                }
+                
             }
-
+        }
         stage("Push the changed files to github"){
             steps{
                 script{
@@ -83,9 +83,17 @@ pipeline{
                     withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
                             sh "git push  https://github.com/yunusemretosun/chat-app.git main" 
                         }
-                    }
                 }
             }
-            
+        }
+        stage("Trigger config change pipeline"){
+            steps{
+                script{
+                    sh "/usr/bin/wget --auth-no-challenge --http-user='appdev' --http-password='119f0919c9872b6d4a9707b656e7dd06aa' --post-data 'IMAGE_TAG=${IMAGE_TAG}' 'http://10.106.31.102:8080/job/gitops-argocd_CD/buildWithParameters?token=gitops-config'" 
+                    
+                    }
+                }
+        }
+        
     }
 }
