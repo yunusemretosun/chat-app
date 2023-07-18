@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: chat-app-container
-        image: yunusemretosun/chatapp:53
+        image: yunusemretosun/chatapp:54
         envFrom:
             - configMapRef:
                 name: django-config
