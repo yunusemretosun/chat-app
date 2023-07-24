@@ -46,3 +46,23 @@ class ServerSerializer(serializers.Serializer):
 Yukarıdaki örnekte, ServerSerializer adında bir serializer sınıfı tanımlanmıştır. Bu sınıf, num_members adında bir alanı SerializerMethodField ile oluşturur. get_num_members yöntemi, obj parametresini alır ve bu parametre aracılığıyla queryset nesnesini temsil eder. Bu yöntemde, obj (queryset nesnesi) üzerinde gerekli hesaplamaları yaparak num_members alanının değerini döndürebilirsiniz.
 
 Bu şekilde, SerializerMethodField ile queryset nesnelerini obj olarak alabilir ve bu nesneler üzerinde istediğiniz işlemleri gerçekleştirebilirsiniz.
+
+
+   @receiver(models.signals.pre_delete, sender="server.Category")
+    def category_delete_files(sender, instance, **kwargs):
+        for field in instance._meta.fields:
+            if field.name == "icon":
+                file = getattr(instance, field.name)
+                if file:
+                    file.delete(save=False)
+
+
+Bu kod parçası, Category modelinden bir örnek silindiğinde (pre_delete sinyali tetiklendiğinde) ilgili icon dosyasının silinmesini sağlamak için kullanılan bir sinyal dinleyicisini (signal receiver) tanımlar.
+
+@receiver(models.signals.pre_delete, sender="server.Category") satırı, pre_delete sinyali Category modelinden bir örnek silindiğinde tetiklenen bir sinyal dinleyicisi olduğunu belirtir. Yani, Category modelindeki herhangi bir örnek silindiğinde, category_delete_files adlı fonksiyon otomatik olarak çalıştırılır.
+
+category_delete_files fonksiyonu, sender, instance ve **kwargs parametrelerini alır. instance parametresi, silinen Category modeli örneğini temsil eder. Bu fonksiyon, örneğin ._meta.fields kullanarak Category modelinin tüm alanlarına erişir ve bu alanların isimlerini kontrol eder.
+
+Döngü içinde, her bir alanın ismi "icon" ile eşleştiğinde, getattr(instance, field.name) kullanarak ilgili dosya alanına (icon) erişir. Ardından, file değişkeni üzerinden bu dosyaya erişilir ve dosya varsa file.delete(save=False) ifadesi ile silinir. save=False parametresi, dosyanın silinmesi için modelin tekrar kaydedilmesini gerektirmez, çünkü burada yalnızca dosyanın silinmesi amaçlanmaktadır.
+
+Bu sinyal dinleyicisi, Category modelinden herhangi bir örnek silindiğinde ilgili icon dosyasını silmeyi sağlar. Bu, örneğin kategori örneği silindiğinde ilişkili ikon dosyasını temizlemek için kullanışlı olabilir.
