@@ -57,7 +57,7 @@ pipeline{
                 }
             }
 
-        stage("Updateing Openshift Deployment Files"){
+        stage("Update Openshift Deployment Files"){
             steps{
                 script{
                     
